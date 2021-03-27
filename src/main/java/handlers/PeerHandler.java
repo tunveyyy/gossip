@@ -1,19 +1,19 @@
 package handlers;
 
+import message.ACK;
+import message.ACK2;
 import message.SYN;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class PeerHandler implements Runnable{
 
     final Socket socket;
-    final ObjectInputStream inputStream;
-    final ObjectOutputStream outputStream;
-    public PeerHandler(Socket socket, ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
+    final InputStream inputStream;
+    final OutputStream outputStream;
+    public PeerHandler(Socket socket, InputStream objectInputStream, OutputStream objectOutputStream) {
         this.socket = socket;
         this.inputStream = objectInputStream;
         this.outputStream = objectOutputStream;
@@ -38,10 +38,18 @@ public class PeerHandler implements Runnable{
      */
     @Override
     public void run() {
-        System.out.println("Inside run");
         try {
-            outputStream.writeObject(new SYN());
-        } catch (IOException e) {
+            ObjectOutputStream out = new ObjectOutputStream(outputStream);
+            out.writeObject(new SYN());
+            ObjectInputStream in =  new ObjectInputStream(inputStream);
+            if(in.readObject().getClass()== ACK.class) {
+                System.out.println("Received ACK");
+                ACK2 ack2 = new ACK2().generateACK2Object();
+                out.writeObject(ack2);
+                System.out.println("Sending ACK2");
+            }
+
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 

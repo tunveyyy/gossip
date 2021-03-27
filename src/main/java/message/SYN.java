@@ -1,6 +1,8 @@
 package message;
 
-public class SYN {
+import java.io.Serializable;
+
+public class SYN implements Serializable {
     public SYN() {
         System.out.println("SYN Object created");
     }

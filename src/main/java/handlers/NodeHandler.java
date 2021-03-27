@@ -47,8 +47,10 @@ public class NodeHandler implements Runnable {
                 System.out.println("Received SYN Object");
                 ACK ack = new GenerateACK().generateACKObject();
                 objectOutputStream.writeObject(ack);
+                System.out.println("Sent ACK");
             }
-            if(receivedMessage.getClass()== ACK2.class){
+            Object receivedMessage1 = objectInputStream.readObject();
+            if(receivedMessage1.getClass()== ACK2.class){
                 System.out.println("Got ACK2. Now I am Updating my own node list");
             }
         } catch (IOException | ClassNotFoundException e) {

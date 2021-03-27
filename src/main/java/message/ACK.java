@@ -1,6 +1,8 @@
 package message;
 
-public class ACK {
+import java.io.Serializable;
+
+public class ACK implements Serializable {
     public ACK() {
         System.out.println("ACK Object created");
     }

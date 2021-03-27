@@ -24,11 +24,10 @@ public class Client {
         OutputStream out = socket.getOutputStream();
         InputStream in = socket.getInputStream();
 
-        ObjectInputStream objectInputStream = new ObjectInputStream(in);
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(out);
+       // ObjectInputStream objectInputStream = new ObjectInputStream(in);
+       // ObjectOutputStream objectOutputStream = new ObjectOutputStream(out);
 
-        System.out.println("Creating thread");
-        Runnable runnable = new PeerHandler(socket,objectInputStream,objectOutputStream);
+        Runnable runnable = new PeerHandler(socket,in,out);
         Thread thread = new Thread(runnable);
         thread.start();
 
