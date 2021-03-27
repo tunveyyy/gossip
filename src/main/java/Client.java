@@ -1,31 +1,36 @@
+import handlers.NodeHandler;
+import handlers.PeerHandler;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Client {
+    String ip;
+    int port;
+    public Client(String ip, int port) {
+        this.ip = ip;
+        this.port = port;
+    }
 
-    public static void main(String[] args) throws IOException {
-        // need host and port, we want to connect to the ServerSocket at port 7777
-        Socket socket = new Socket("localhost", 7777);
-        System.out.println("Connected!");
+    public static void main(String[] args)throws IOException {
+        String ip = "localhost";
+        int port = 5000;
+        Socket socket = new Socket(ip, port);
+        System.out.println("Connected to " + ip + ":" + port);
 
-        // get the output stream from the socket.
-        OutputStream outputStream = socket.getOutputStream();
-        // create an object output stream from the output stream so we can send an object through it
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+        OutputStream out = socket.getOutputStream();
+        InputStream in = socket.getInputStream();
 
-        // make a bunch of messages to send.
-        List<Message> messages = new ArrayList<>();
-        messages.add(new Message("Hello from the other side!"));
-        messages.add(new Message("How are you doing?"));
-        messages.add(new Message("What time is it?"));
-        messages.add(new Message("Hi hi hi hi."));
+        ObjectInputStream objectInputStream = new ObjectInputStream(in);
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(out);
 
-        System.out.println("Sending messages to the ServerSocket");
-        objectOutputStream.writeObject(messages);
+        System.out.println("Creating thread");
+        Runnable runnable = new PeerHandler(socket,objectInputStream,objectOutputStream);
+        Thread thread = new Thread(runnable);
+        thread.start();
 
-        System.out.println("Closing socket and terminating program.");
-        socket.close();
     }
 }
