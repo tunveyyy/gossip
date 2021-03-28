@@ -13,18 +13,18 @@ public class GossipDigest {
     final int maxVersion;
 
     // Constructor to initialize the gossip digest
-    GossipDigest(InetAddressAndPort ep, int gen, int version){
-        endpoint = ep;
-        generation = gen;
-        maxVersion = version;
+    public GossipDigest(InetAddressAndPort endpoint, int generation, int heartbeat){
+        this.endpoint = endpoint;
+        this.generation = generation;
+        this.maxVersion = heartbeat;
     }
 
     // Return the Generation Difference or Application version difference
     public int compareTo(GossipDigest gDigest)
     {
         if (generation != gDigest.generation)
-            return (generation - gDigest.generation);
-        return (maxVersion - gDigest.maxVersion);
+            return (generation - gDigest.generation);  // send entire hashmap
+        return (maxVersion - gDigest.maxVersion); // just request
     }
 
     // Return the class members on request
@@ -33,7 +33,7 @@ public class GossipDigest {
         return endpoint;
     }
 
-    int getGeneration()
+    public int getGeneration()
     {
         return generation;
     }

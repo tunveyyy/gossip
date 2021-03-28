@@ -23,7 +23,7 @@ public class EndPointState {
         isActive = true;
     }
 
-    HeartbeatState getHeartbeatState() {
+    public HeartbeatState getHeartbeatState() {
         return hbState;
     }
 

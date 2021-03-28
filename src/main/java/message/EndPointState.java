@@ -1,4 +1,8 @@
-import com.sun.source.doctree.SeeTree;
+package message;
+
+import data_structures.HeartbeatState;
+import data_structures.MetaAppState;
+import message.ApplicationState;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;

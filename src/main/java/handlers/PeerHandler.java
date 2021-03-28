@@ -1,8 +1,7 @@
 package handlers;
 
-import message.ACK;
-import message.ACK2;
-import message.SYN;
+import NodeState.EndPointStateMap;
+import message.*;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -13,10 +12,15 @@ public class PeerHandler implements Runnable{
     final Socket socket;
     final InputStream inputStream;
     final OutputStream outputStream;
-    public PeerHandler(Socket socket, InputStream objectInputStream, OutputStream objectOutputStream) {
+    String clusterName;
+    String partitionerId;
+
+    public PeerHandler(Socket socket, InputStream objectInputStream, OutputStream objectOutputStream,String clusterName, String partitionerId) {
         this.socket = socket;
         this.inputStream = objectInputStream;
         this.outputStream = objectOutputStream;
+        this.clusterName = clusterName;
+        this.partitionerId = partitionerId;
     }
 
     /*
@@ -40,11 +44,15 @@ public class PeerHandler implements Runnable{
     public void run() {
         try {
             ObjectOutputStream out = new ObjectOutputStream(outputStream);
-            out.writeObject(new SYN());
+            System.out.println("Sending SYN");
+            out.writeObject(new GossipDigestSyn(clusterName,partitionerId, EndPointStateMap.getGossipDigests()));
             ObjectInputStream in =  new ObjectInputStream(inputStream);
-            if(in.readObject().getClass()== ACK.class) {
+
+            Object receivedMessage = in.readObject();
+            if(receivedMessage.getClass()== GossipDigestAck.class) {
                 System.out.println("Received ACK");
-                ACK2 ack2 = new ACK2().generateACK2Object();
+                GossipDigestAck message = (GossipDigestAck) receivedMessage;
+                GossipDigestAck2 ack2 = new AckVerbHandler().generateAck2(message.getGossipDigestList(),message.getEndpointStateMap());
                 out.writeObject(ack2);
                 System.out.println("Sending ACK2");
             }

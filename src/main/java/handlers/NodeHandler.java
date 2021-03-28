@@ -1,9 +1,6 @@
 package handlers;
 
-import Utils.GenerateACK;
-import message.ACK;
-import message.ACK2;
-import message.SYN;
+import message.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -42,15 +39,19 @@ public class NodeHandler implements Runnable {
     public void run() {
 
         try {
-            Object receivedMessage = objectInputStream.readObject();
-            if(receivedMessage.getClass()== SYN.class) {
+            Object SYNMessage = objectInputStream.readObject();
+            if(SYNMessage.getClass()== GossipDigestSyn.class) {
                 System.out.println("Received SYN Object");
-                ACK ack = new GenerateACK().generateACKObject();
+                GossipDigestSyn message =  (GossipDigestSyn) SYNMessage;
+                GossipDigestAck ack = new SynVerbHandler().generateAck(message.getGossipDigests());
+
                 objectOutputStream.writeObject(ack);
                 System.out.println("Sent ACK");
             }
-            Object receivedMessage1 = objectInputStream.readObject();
-            if(receivedMessage1.getClass()== ACK2.class){
+            Object ACK2Message = objectInputStream.readObject();
+            if(ACK2Message.getClass()== GossipDigestAck2.class){
+                GossipDigestAck2 message = (GossipDigestAck2)  ACK2Message;
+                new Ack2VerbHandler().doVerb(message.getEndpointStateMap());
                 System.out.println("Got ACK2. Now I am Updating my own node list");
             }
         } catch (IOException | ClassNotFoundException e) {
