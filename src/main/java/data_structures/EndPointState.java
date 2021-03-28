@@ -1,4 +1,6 @@
-import com.sun.source.doctree.SeeTree;
+package data_structures;
+
+
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -21,11 +23,11 @@ public class EndPointState {
         isActive = true;
     }
 
-    HeartbeatState getHeartbeatState() {
+    public HeartbeatState getHeartbeatState() {
         return hbState;
     }
 
-    void setHeartbeatState(HeartbeatState hbState) {
+    public void setHeartbeatState(HeartbeatState hbState) {
         updateTimestamp();
         this.hbState = hbState;
     }

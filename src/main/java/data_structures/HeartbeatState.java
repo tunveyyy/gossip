@@ -1,35 +1,39 @@
+package data_structures;
+
 public class HeartbeatState {
     private int generation; /* time when Node was launched */
     private int hbValue;    /* heartbeat value */
 
-    HeartbeatState(int generation) {
+    public HeartbeatState(int generation) {
         this.generation = generation;
         this.hbValue = 0;
     }
-    HeartbeatState(int generation, int hbValue) {
+    public HeartbeatState(int generation, int hbValue) {
         this.generation = generation;
         this.hbValue = hbValue;
     }
 
-    int getGeneration() {
+    public int getGeneration() {
         return this.generation;
     }
 
-    int getHeartbeatValue() {
+    public int getHeartbeatValue() {
         return this.hbValue;
     }
 
-    void updateHeartbeat() {
+    public void updateHeartbeat() {
         this.hbValue = this.hbValue + 1;
     }
 
     /* newGeneration is used whenever node turns to NORMAL STATUS */
-    void newGeneration() {
+    public void newGeneration() {
         this.generation += 1;
     }
 
-    // TODO: setgeneration()
-    /*set generation*/
+    public void setGeneration() {
+        this.generation = (int)System.nanoTime();
+    }
+
     public String toString() {
         return String.format("Heartbeat: generation = %d, hbValue = %d", this.generation, this.hbValue);
     }

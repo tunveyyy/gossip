@@ -1,3 +1,5 @@
+package data_structures;
+
 public enum ApplicationState {
     STATUS,
     SCHEMA,

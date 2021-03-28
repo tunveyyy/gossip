@@ -1,3 +1,5 @@
+package data_structures;
+
 public class MetaAppState {
 
     public final static String STATUS_BOOTSTRAPPING = "BOOT";

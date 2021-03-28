@@ -1,10 +1,12 @@
+package data_structures;
+
 import java.net.InetAddress;
 
 public class InetAddressAndPort {
     public final InetAddress address;
     public final int port;
 
-    private InetAddressAndPort(InetAddress address, int port) {
+    public InetAddressAndPort(InetAddress address, int port) {
         this.address = address;
         this.port = port;
     }

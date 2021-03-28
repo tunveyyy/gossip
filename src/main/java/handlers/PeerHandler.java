@@ -1,22 +1,26 @@
 package handlers;
 
-import message.SYN;
+import NodeState.EndPointStateMap;
+import message.*;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class PeerHandler implements Runnable{
 
     final Socket socket;
-    final ObjectInputStream inputStream;
-    final ObjectOutputStream outputStream;
-    public PeerHandler(Socket socket, ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
+    final InputStream inputStream;
+    final OutputStream outputStream;
+    String clusterName;
+    String partitionerId;
+
+    public PeerHandler(Socket socket, InputStream objectInputStream, OutputStream objectOutputStream,String clusterName, String partitionerId) {
         this.socket = socket;
         this.inputStream = objectInputStream;
         this.outputStream = objectOutputStream;
+        this.clusterName = clusterName;
+        this.partitionerId = partitionerId;
     }
 
     /*
@@ -38,10 +42,22 @@ public class PeerHandler implements Runnable{
      */
     @Override
     public void run() {
-        System.out.println("Inside run");
         try {
-            outputStream.writeObject(new SYN());
-        } catch (IOException e) {
+            ObjectOutputStream out = new ObjectOutputStream(outputStream);
+            System.out.println("Sending SYN");
+            out.writeObject(new GossipDigestSyn(clusterName,partitionerId, EndPointStateMap.getGossipDigests()));
+            ObjectInputStream in =  new ObjectInputStream(inputStream);
+
+            Object receivedMessage = in.readObject();
+            if(receivedMessage.getClass()== GossipDigestAck.class) {
+                System.out.println("Received ACK");
+                GossipDigestAck message = (GossipDigestAck) receivedMessage;
+                GossipDigestAck2 ack2 = new AckVerbHandler().generateAck2(message.getGossipDigestList(),message.getEndpointStateMap());
+                out.writeObject(ack2);
+                System.out.println("Sending ACK2");
+            }
+
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
