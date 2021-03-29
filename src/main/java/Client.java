@@ -1,38 +1,40 @@
-import handlers.NodeHandler;
-import handlers.PeerHandler;
+import Utils.HeartBeatState;
+import Utils.StartGossip;
 
 import java.io.*;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.concurrent.*;
 
 public class Client {
 
-//    public Client(String ip, int port, String clusterId, int partitionerId) {
+    String ip;
+    int port;
+    String clusterName;
+    String partitionerId;
+//    public Client(String ip, int port, String clusterName, String partitionerId) throws IOException {
 //        this.ip = ip;
 //        this.port = port;
-//        this.clusterId = clusterId;
+//        this.clusterName = clusterName;
 //        this.partitionerId = partitionerId;
+//        //initiateGossip(Gossiper.randomGossip());
+//
 //    }
 
-    public static void main(String[] args)throws IOException {
+    public static void main(String[] args) throws IOException {
         String ip = "localhost";
-        int port = 5000;
+        int port = 5001;
         final String clusterName = "Cluster";
         final String partitionerId = "1";
-        Socket socket = new Socket(ip, port);
-        System.out.println("Connected to " + ip + ":" + port);
+        int noOfNeighbours = 3;
+        int tGossip = 3;
+        int heartBeat = 1;
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(10);
 
-        OutputStream out = socket.getOutputStream();
-        InputStream in = socket.getInputStream();
+        executor.scheduleAtFixedRate(new StartGossip(ip,port,noOfNeighbours,clusterName,partitionerId), 0, tGossip, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(new HeartBeatState(),0,heartBeat,TimeUnit.SECONDS);
 
-       // ObjectInputStream objectInputStream = new ObjectInputStream(in);
-       // ObjectOutputStream objectOutputStream = new ObjectOutputStream(out);
-
-        Runnable runnable = new PeerHandler(socket,in,out,clusterName, partitionerId);
-        Thread thread = new Thread(runnable);
-        thread.start();
-
+        System.out.println("Timer Task started");
     }
+
+
+
 }

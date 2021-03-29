@@ -2,12 +2,15 @@ package NodeState;
 
 import data_structures.EndPointState;
 import data_structures.InetAddressAndPort;
+import handlers.PeerHandler;
 import message.GossipDigest;
 import message.GossipDigestSyn;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.util.*;
 
 public class Gossiper {
     public static void examineGossiper(List<GossipDigest> gDigestList, List<InetAddressAndPort>deltaGossipDigestList, Map<InetAddressAndPort, EndPointState> deltaEndPointStateMap){
@@ -39,5 +42,36 @@ public class Gossiper {
 
         }
 
+    }
+
+    public static List<InetAddressAndPort> randomGossip(InetAddressAndPort selfAddress, int noOfNodesToGossipTo){
+        Set<InetAddressAndPort> keys = EndPointStateMap.getEndPointStateMap().keySet();
+        keys.remove(selfAddress);
+        List<InetAddressAndPort> keyList = new ArrayList<>(keys);
+
+        if(keys.size() < noOfNodesToGossipTo)
+            return null;
+
+        List<InetAddressAndPort> nodeList = new ArrayList<>();
+        for(int i = 0; i < noOfNodesToGossipTo; i++){
+            int index = new Random().nextInt(keyList.size());
+            nodeList.add(keyList.get(index));
+            keyList.remove(index);
+        }
+        return nodeList;
+    }
+    public void startGossip(String ip,int port,String clusterName, String partitionerId) {
+        try {
+            Socket socket = new Socket(ip, port);
+            System.out.println("Connected to " + ip + ":" + port);
+
+            OutputStream out = socket.getOutputStream();
+            InputStream in = socket.getInputStream();
+            Runnable runnable = new PeerHandler(socket, in, out, clusterName, partitionerId);
+            Thread thread = new Thread(runnable);
+            thread.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

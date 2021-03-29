@@ -41,7 +41,7 @@ public class NodeHandler implements Runnable {
         try {
             Object SYNMessage = objectInputStream.readObject();
             if(SYNMessage.getClass()== GossipDigestSyn.class) {
-                System.out.println("Received SYN Object");
+                System.out.println("Received SYN Object from " + socket.getInetAddress());
                 GossipDigestSyn message =  (GossipDigestSyn) SYNMessage;
                 GossipDigestAck ack = new SynVerbHandler().generateAck(message.getGossipDigests());
 

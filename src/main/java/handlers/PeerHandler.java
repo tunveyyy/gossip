@@ -42,6 +42,7 @@ public class PeerHandler implements Runnable{
      */
     @Override
     public void run() {
+        System.out.println(Thread.currentThread().getName());
         try {
             ObjectOutputStream out = new ObjectOutputStream(outputStream);
             System.out.println("Sending SYN");
