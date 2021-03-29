@@ -1,3 +1,5 @@
+package data_structures;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class VersionGenerator {

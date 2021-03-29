@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
 
+import data_structures.*;
 public class StartGossip extends TimerTask {
     String ip;
    int port;
@@ -42,11 +43,13 @@ public class StartGossip extends TimerTask {
         try {
             InetAddressAndPort selfAddress = new InetAddressAndPort(InetAddress.getByName(ip), port);
             neighbors = Gossiper.randomGossip(selfAddress, noOfNeighbours);
-            //EndPointStateMap.getEndPointStateMap().get(selfAddress,)
-            assert neighbors != null;
-            for (InetAddressAndPort node : neighbors) {
-                Gossiper gossiper = new Gossiper();
-                gossiper.startGossip(node.getHostAddress(false), node.port, clusterName, partitionerId);
+            EndPointState value = EndPointStateMap.getEndPointStateMap().get(selfAddress);
+            if(value.getApplicationState(ApplicationState.STATUS) == MetaAppState.STATUS_NORMAL) {
+                assert neighbors != null;
+                for (InetAddressAndPort node : neighbors) {
+                    Gossiper gossiper = new Gossiper();
+                    gossiper.startGossip(node.getHostAddress(false), node.port, clusterName, partitionerId);
+                }
             }
         } catch (UnknownHostException e) {
             System.out.println("IP address string cannot be converted into InetAddress");

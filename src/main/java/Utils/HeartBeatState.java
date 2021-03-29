@@ -22,9 +22,9 @@ public class HeartBeatState extends TimerTask {
             currEpState.getHeartbeatState().updateHeartBeat();    
         }
         //TODO: fix required in addApplicationState under EndPointState.java
-        // if(currEpState.getApplicationState(ApplicationState.STATUS) == MetaAppState.STATUS_BOOTSTRAPPING) {
-        //     currEpState.addApplicationState(ApplicationState.STATUS, MetaAppState.STATUS_NORMAL);
-        // }
+        if(currEpState.getApplicationState(ApplicationState.STATUS) == MetaAppState.STATUS_BOOTSTRAPPING) {
+            currEpState.addApplicationState(ApplicationState.STATUS, MetaAppState.STATUS_NORMAL);
+        }
         
     }
 }
