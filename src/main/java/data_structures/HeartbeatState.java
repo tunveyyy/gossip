@@ -21,8 +21,8 @@ public class HeartbeatState {
         return this.hbValue;
     }
 
-    public void updateHeartbeat() {
-        this.hbValue = this.hbValue + 1;
+    public void updateHeartBeat() { 
+        this.hbValue = VersionGenerator.getNextVersion(); 
     }
 
     /* newGeneration is used whenever node turns to NORMAL STATUS */
