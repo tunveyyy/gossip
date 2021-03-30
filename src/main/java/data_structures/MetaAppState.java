@@ -18,18 +18,18 @@ public class MetaAppState {
     // values for ApplicationState.REMOVAL_COORDINATOR
 //    public final static String REMOVAL_COORDINATOR = "REMOVER";
 
-    public final int version;
+    public final ApplicationState version;
     public final String value;
 
-    private MetaAppState(String value, int version) {
+    public MetaAppState(String value, ApplicationState version) {
         this.version = version;
         this.value = value;
     }
 
-    private MetaAppState(String value) {
+   /* private MetaAppState(String value) {
         this.value = value;
-        this.version = 1;      // require version generator
-    }
+        //this.version = 1;      // require version generator
+    }*/
 
 
 }

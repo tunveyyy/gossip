@@ -9,10 +9,11 @@ public class Server {
     int portNumber;
     public Server(int portNumber) {
         this.portNumber = portNumber;
+        runAsServer();
     }
 
-    public static void main(String[] args) {
-        int portNumber = 5000;
+    public void runAsServer() {
+        //int portNumber = 5000;
       //   don't need to specify a hostname, it will be the current machine
         ServerSocket serverSocket = null;
         try {

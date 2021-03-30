@@ -32,16 +32,16 @@ public class EndPointState {
         this.hbState = hbState;
     }
 
-    public MetaAppState getApplicationState(ApplicationState key) {
-        return applicationState.get().get(key);
+    public String getApplicationState(ApplicationState key) {
+        return applicationState.get().get(key).toString();
     }
 
     public Set<Map.Entry<ApplicationState, MetaAppState>> states() {
         return applicationState.get().entrySet();
     }
 
-    public void addApplicationState(ApplicationState key, MetaAppState value) {
-        addApplicationStates(Collections.singletonMap(key, value));
+    public void addApplicationState(ApplicationState key, String value) {
+        applicationState.set(Collections.singletonMap(key,  new MetaAppState(value, ApplicationState.APPLICATION_VERSION))); 
     }
 
     public void addApplicationStates(Map<ApplicationState, MetaAppState> values) {
@@ -74,8 +74,7 @@ public class EndPointState {
         return getStatus().equals(MetaAppState.STATUS_NORMAL);
     }
     public String getStatus() {
-        MetaAppState status = getApplicationState(ApplicationState.STATUS);
-        return status.value;
+        return getApplicationState(ApplicationState.STATUS);
     }
     public String toString() {
         return "EndpointState: HeartBeatState = " + hbState + ", AppStateMap = " + applicationState.get();
