@@ -6,7 +6,7 @@ public class Application{
 
 //        Server node = new Server(5000);
         Server node2 = new Server(5001);
-//
+
         //Client node3 = new Client("localhost",5001,"Cluster1","1");
 //        Client node4 = new Client("localhost",5000,"Cluster1","1");
 //        Client node5 = new Client("localhost",5000,"Cluster1","1");
