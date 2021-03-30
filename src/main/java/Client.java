@@ -1,5 +1,6 @@
 import Utils.HeartBeatState;
 import Utils.StartGossip;
+import data_structures.*;
 
 import java.io.*;
 import java.util.concurrent.*;
@@ -22,6 +23,8 @@ public class Client {
     public static void main(String[] args) throws IOException {
         String ip = "localhost";
         int port = 5001;
+        HeartbeatState hb1 = new HeartbeatState((int) System.nanoTime(), 0);
+        EndPointState ep1 = new EndPointState(hb1);
         final String clusterName = "Cluster";
         final String partitionerId = "1";
         int noOfNeighbours = 3;
@@ -30,7 +33,7 @@ public class Client {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(10);
 
         executor.scheduleAtFixedRate(new StartGossip(ip,port,noOfNeighbours,clusterName,partitionerId), 0, tGossip, TimeUnit.SECONDS);
-        executor.scheduleAtFixedRate(new HeartBeatState(),0,heartBeat,TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(new HeartBeatState(ep1),0,heartBeat,TimeUnit.SECONDS);
 
         System.out.println("Timer Task started");
     }

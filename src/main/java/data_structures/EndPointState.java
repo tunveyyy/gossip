@@ -32,8 +32,8 @@ public class EndPointState {
         this.hbState = hbState;
     }
 
-    public MetaAppState getApplicationState(ApplicationState key) {
-        return applicationState.get().get(key);
+    public String getApplicationState(ApplicationState key) {
+        return applicationState.get().get(key).toString();
     }
 
     public Set<Map.Entry<ApplicationState, MetaAppState>> states() {
