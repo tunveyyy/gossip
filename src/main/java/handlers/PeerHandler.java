@@ -48,7 +48,7 @@ public class PeerHandler implements Runnable{
             System.out.println("Sending SYN");
             out.writeObject(new GossipDigestSyn(clusterName,partitionerId, EndPointStateMap.getGossipDigests()));
             ObjectInputStream in =  new ObjectInputStream(inputStream);
-
+            Thread.sleep(15000);
             Object receivedMessage = in.readObject();
             if(receivedMessage.getClass()== GossipDigestAck.class) {
                 System.out.println("Received ACK");
@@ -58,7 +58,7 @@ public class PeerHandler implements Runnable{
                 System.out.println("Sending ACK2");
             }
 
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | InterruptedException e) {
             e.printStackTrace();
         }
 

@@ -1,3 +1,4 @@
+import NodeState.Gossiper;
 import Utils.HeartBeatState;
 import Utils.StartGossip;
 import data_structures.*;
@@ -22,7 +23,7 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
         String ip = "localhost";
-        int port = 5001;
+        int port = Integer.parseInt(args[0]);
         HeartbeatState hb1 = new HeartbeatState((int) System.nanoTime(), 0);
         EndPointState ep1 = new EndPointState(hb1);
         final String clusterName = "Cluster";
@@ -34,7 +35,8 @@ public class Client {
 
         executor.scheduleAtFixedRate(new StartGossip(ip,port,noOfNeighbours,clusterName,partitionerId), 0, tGossip, TimeUnit.SECONDS);
         executor.scheduleAtFixedRate(new HeartBeatState(ep1),0,heartBeat,TimeUnit.SECONDS);
-
+        Gossiper g = new Gossiper();
+        g.startGossip(ip,port,clusterName,partitionerId);
         System.out.println("Timer Task started");
     }
 

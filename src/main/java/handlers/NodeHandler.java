@@ -12,10 +12,15 @@ public class NodeHandler implements Runnable {
     ObjectInputStream objectInputStream;
     ObjectOutputStream objectOutputStream;
 
-    public NodeHandler(Socket socket, ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
+    public NodeHandler(Socket socket) {
         this.socket = socket;
-        this.objectInputStream = objectInputStream;
-        this.objectOutputStream = objectOutputStream;
+
+        try {
+            this.objectInputStream = new ObjectInputStream(socket.getInputStream());;
+            this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /*
@@ -39,6 +44,7 @@ public class NodeHandler implements Runnable {
     public void run() {
 
         try {
+//            ObjectInputStream in  = new ObjectInputStream(objectInputStream);
             Object SYNMessage = objectInputStream.readObject();
             if(SYNMessage.getClass()== GossipDigestSyn.class) {
                 System.out.println("Received SYN Object from " + socket.getInetAddress());
@@ -48,12 +54,15 @@ public class NodeHandler implements Runnable {
                 objectOutputStream.writeObject(ack);
                 System.out.println("Sent ACK");
             }
+//            in  = new ObjectInputStream(objectInputStream);
             Object ACK2Message = objectInputStream.readObject();
             if(ACK2Message.getClass()== GossipDigestAck2.class){
                 GossipDigestAck2 message = (GossipDigestAck2)  ACK2Message;
                 new Ack2VerbHandler().doVerb(message.getEndpointStateMap());
                 System.out.println("Got ACK2. Now I am Updating my own node list");
             }
+            objectOutputStream.reset();
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

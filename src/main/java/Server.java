@@ -30,14 +30,15 @@ public class Server {
                 System.out.println("Connection from " + socket + "!");
 
                 // get the input stream from the connected socket
-                InputStream inputStream = socket.getInputStream();
-                OutputStream outputStream = socket.getOutputStream();
+//                InputStream inputStream = socket.getInputStream();
+//                OutputStream outputStream = socket.getOutputStream();
+//
+//                // create a DataInputStream so we can read data from it.
+//                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+//                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
-                // create a DataInputStream so we can read data from it.
-                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-
-                Runnable runnable = new NodeHandler(socket,objectInputStream,objectOutputStream);
+//                Runnable runnable = new NodeHandler(socket,objectInputStream,objectOutputStream);
+                Runnable runnable = new NodeHandler(socket);
                 Thread thread = new Thread(runnable);
                 thread.start();
 
@@ -58,3 +59,4 @@ public class Server {
 
     }
 }
+
