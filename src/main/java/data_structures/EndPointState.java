@@ -2,10 +2,11 @@ package data_structures;
 
 
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class EndPointState {
+public class EndPointState implements Serializable {
     private HeartbeatState hbState;
     private final AtomicReference<Map<ApplicationState, MetaAppState>> applicationState;
 

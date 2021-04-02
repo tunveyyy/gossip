@@ -1,6 +1,8 @@
 package data_structures;
 
-public class MetaAppState {
+import java.io.Serializable;
+
+public class MetaAppState implements Serializable {
 
     public final static String STATUS_BOOTSTRAPPING = "BOOT";
 //    public final static String STATUS_BOOTSTRAPPING_REPLACE = "BOOT_REPLACE";
@@ -25,7 +27,7 @@ public class MetaAppState {
         this.version = version;
         this.value = value;
     }
-
+//TODO: implement toString()
    /* private MetaAppState(String value) {
         this.value = value;
         //this.version = 1;      // require version generator

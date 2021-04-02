@@ -14,11 +14,12 @@ public class EndPointStateMap {
         return endPointStateMap;
     }
 
-    static Map<InetAddressAndPort,EndPointState> endPointStateMap = new HashMap<>();
-
+    public static Map<InetAddressAndPort,EndPointState> endPointStateMap = new HashMap<>();
+    /*
     public static void setEndPointStateMap(Map<InetAddressAndPort, EndPointState> endPointStateMap) {
         EndPointStateMap.endPointStateMap = endPointStateMap;
-    }
+    }*/
+
 
     public static List<GossipDigest> getGossipDigests(){
         List<GossipDigest> digests = new ArrayList<>();

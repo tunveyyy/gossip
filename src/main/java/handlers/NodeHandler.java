@@ -44,7 +44,6 @@ public class NodeHandler implements Runnable {
     public void run() {
 
         try {
-//            ObjectInputStream in  = new ObjectInputStream(objectInputStream);
             Object SYNMessage = objectInputStream.readObject();
             if(SYNMessage.getClass()== GossipDigestSyn.class) {
                 System.out.println("Received SYN Object from " + socket.getInetAddress());
@@ -54,10 +53,11 @@ public class NodeHandler implements Runnable {
                 objectOutputStream.writeObject(ack);
                 System.out.println("Sent ACK");
             }
-//            in  = new ObjectInputStream(objectInputStream);
+
             Object ACK2Message = objectInputStream.readObject();
             if(ACK2Message.getClass()== GossipDigestAck2.class){
                 GossipDigestAck2 message = (GossipDigestAck2)  ACK2Message;
+                System.out.println("Message epState Map ACK2: "+message.getEndpointStateMap());
                 new Ack2VerbHandler().doVerb(message.getEndpointStateMap());
                 System.out.println("Got ACK2. Now I am Updating my own node list");
             }

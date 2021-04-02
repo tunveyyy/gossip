@@ -1,6 +1,8 @@
 package data_structures;
 
-public class HeartbeatState {
+import java.io.Serializable;
+
+public class HeartbeatState implements Serializable {
     private int generation; /* time when Node was launched */
     private int hbValue;    /* heartbeat value */
 

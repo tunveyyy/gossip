@@ -59,6 +59,7 @@ public class StartGossip extends TimerTask {
 
                     Gossiper gossiper = new Gossiper();
                     gossiper.startGossip(node.getHostAddress(false), node.port, clusterName, partitionerId);
+
                 }
             }
     }

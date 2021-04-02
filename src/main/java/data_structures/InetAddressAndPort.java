@@ -1,8 +1,9 @@
 package data_structures;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 
-public class InetAddressAndPort {
+public class InetAddressAndPort implements Serializable {
     public final InetAddress address;
     public final int port;
 

@@ -12,7 +12,7 @@ public class Ack2VerbHandler {
     public void doVerb(Map<InetAddressAndPort,EndPointState> receivedStateMap)
     {
         Map<InetAddressAndPort, EndPointState> localEpStateMap = EndPointStateMap.getEndPointStateMap();
-
+        System.out.println("Local ep map: "+localEpStateMap);
         System.out.println("Updating my endPointState");
         for(Map.Entry<InetAddressAndPort, EndPointState> e: receivedStateMap.entrySet()){
             if(e.getValue().getHeartbeatState().getGeneration() > localEpStateMap.get(e.getKey()).getHeartbeatState().getGeneration())

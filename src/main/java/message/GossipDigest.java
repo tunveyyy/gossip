@@ -3,11 +3,10 @@ package message;
 import data_structures.InetAddressAndPort;
 
 import java.io.*;
-import java.net.InetAddress;
 
 //import InetAddressAndPort;
 
-public class GossipDigest {
+public class GossipDigest implements Serializable {
     final InetAddressAndPort endpoint;
     final int generation;
     final int maxVersion;

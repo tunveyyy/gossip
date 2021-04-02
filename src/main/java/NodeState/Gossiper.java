@@ -13,7 +13,7 @@ import java.net.Socket;
 import java.util.*;
 
 public class Gossiper {
-    public static void examineGossiper(List<GossipDigest> gDigestList, List<InetAddressAndPort>deltaGossipDigestList, Map<InetAddressAndPort, EndPointState> deltaEndPointStateMap){
+    public static void examineGossiper(List<GossipDigest> gDigestList, List<GossipDigest> deltaGossipDigestList, Map<InetAddressAndPort, EndPointState> deltaEndPointStateMap){
 
         Map<InetAddressAndPort, EndPointState> localStateMap = EndPointStateMap.getEndPointStateMap();
 
@@ -24,12 +24,12 @@ public class Gossiper {
                 int remoteGeneration = gossipDigest.getGeneration();
                 int localGeneration = localStateMap.get(gossipDigest.getEndpoint()).getHeartbeatState().getGeneration();
                 if(localGeneration < remoteGeneration)
-                    deltaGossipDigestList.add(gossipDigest.getEndpoint());
+                    deltaGossipDigestList.add(gossipDigest);
                 else if(localGeneration == remoteGeneration){
                     int remoteHeartbeat = gossipDigest.getMaxVersion();
                     int localHeartbeat = localStateMap.get(gossipDigest.getEndpoint()).getHeartbeatState().getHeartbeatValue();
                     if(localHeartbeat < remoteHeartbeat) {
-                        deltaGossipDigestList.add(gossipDigest.getEndpoint());
+                        deltaGossipDigestList.add(gossipDigest);
                     }
                     else if(localHeartbeat > remoteHeartbeat){
                         deltaEndPointStateMap.put(gossipDigest.getEndpoint(), localStateMap.get(gossipDigest.getEndpoint()));
@@ -37,7 +37,7 @@ public class Gossiper {
                 }
             }
             else {
-                deltaGossipDigestList.add(gossipDigest.getEndpoint());
+                deltaGossipDigestList.add(gossipDigest);
             }
 
         }
@@ -45,19 +45,21 @@ public class Gossiper {
     }
 
     public static List<InetAddressAndPort> randomGossip(InetAddressAndPort selfAddress, int noOfNodesToGossipTo){
+        System.out.println("in random gossip\n");
         Set<InetAddressAndPort> keys = EndPointStateMap.getEndPointStateMap().keySet();
         keys.remove(selfAddress);
         List<InetAddressAndPort> keyList = new ArrayList<>(keys);
-
+        System.out.println("KeyList: "+keyList);
         if(keys.size() < noOfNodesToGossipTo)
             return null;
-
+        System.out.println("start for random gsp, key size: \n"+keyList.size());
         List<InetAddressAndPort> nodeList = new ArrayList<>();
         for(int i = 0; i < noOfNodesToGossipTo; i++){
             int index = new Random().nextInt(keyList.size());
             nodeList.add(keyList.get(index));
             keyList.remove(index);
         }
+        System.out.println("end of random gsp: "+nodeList.toString());
         return nodeList;
     }
     public void startGossip(String ip,int port,String clusterName, String partitionerId) {
@@ -69,16 +71,7 @@ public class Gossiper {
             InputStream in = socket.getInputStream();
             Runnable runnable = new PeerHandler(socket, in, out, clusterName, partitionerId);
             Thread thread = new Thread(runnable);
-//            Thread thread1 = new Thread(runnable);
-//            Thread thread2 = new Thread(runnable);
-//            Thread thread3 = new Thread(runnable);
-//            Thread thread4 = new Thread(runnable);
-
             thread.start();
-//            thread1.start();
-//            thread2.start();
-//            thread3.start();
-//            thread4.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
