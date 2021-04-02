@@ -40,20 +40,27 @@ public class StartGossip extends TimerTask {
 
         List<InetAddressAndPort> neighbors = null;
 
+        System.out.println("----------------gossip triggered : " + new Date());
+//        Gossiper gossiper = new Gossiper();
+//        gossiper.startGossip(ip, port, "1", "1");
+        InetAddressAndPort selfAddress = null;
         try {
-            InetAddressAndPort selfAddress = new InetAddressAndPort(InetAddress.getByName(ip), port);
-            neighbors = Gossiper.randomGossip(selfAddress, noOfNeighbours);
-            EndPointState value = EndPointStateMap.getEndPointStateMap().get(selfAddress);
+            selfAddress = new InetAddressAndPort(InetAddress.getByName(ip), port);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        neighbors = Gossiper.randomGossip(selfAddress, noOfNeighbours);
+        System.out.println("Total Neighbors: "+neighbors.size());
+        EndPointState value = EndPointStateMap.getEndPointStateMap().get(selfAddress);
             if(value.getApplicationState(ApplicationState.STATUS) == MetaAppState.STATUS_NORMAL) {
                 assert neighbors != null;
+
                 for (InetAddressAndPort node : neighbors) {
+
                     Gossiper gossiper = new Gossiper();
                     gossiper.startGossip(node.getHostAddress(false), node.port, clusterName, partitionerId);
                 }
             }
-        } catch (UnknownHostException e) {
-            System.out.println("IP address string cannot be converted into InetAddress");
-        }
     }
 
 

@@ -1,3 +1,7 @@
+package data_structures_test;
+
+import data_structures.InetAddressAndPort;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
